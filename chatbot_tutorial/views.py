@@ -46,10 +46,21 @@ def send_messages(message, token):
     else:
         result_message['text'] = "I don't know any responses for that. If you're interested in yo mama jokes tell me fat, stupid or dumb."
 
+    button_list = {'fat', 'stupid', 'dumb'}
+    keyboard = []
+    for b in button_list:
+        button = {}
+        button['text'] = b
+        button_row = [button]
+        keyboard.append(button_row)
+
+    reply_keyboard_markup = {}
+    reply_keyboard_markup['keyboard'] = keyboard
+    result_message['reply_markup'] = reply_keyboard_markup
+
     response_msg = json.dumps(result_message)
     status = requests.post(post_message_url, headers={
         "Content-Type": "application/json"}, data=response_msg)
-
 
 class TelegramBotView(generic.View):
 
