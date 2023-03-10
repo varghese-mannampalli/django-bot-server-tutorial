@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['localhost', '27b7-2406-7400-56-b5cd-5bd4-7f77-70e4-cfeb.in.ngr
 # Application definition
 
 INSTALLED_APPS = [
+    'chatbot',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
