@@ -1,6 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -10,6 +9,7 @@ from django.utils.decorators import method_decorator
 from django.http.response import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Buttons
+from .models import Users
 
 def get_message_from_request(request):
 
@@ -38,6 +38,15 @@ def send_messages(message, token):
 
     result_message = {}         # the response needs to contain just a chat_id and text field for  telegram to accept it
     result_message['chat_id'] = message['chat_id']
+
+    try:
+        user = Users.objects.get(user_id=result_message['chat_id'])
+        user.calls = user.calls+1
+        user.save()
+    except ObjectDoesNotExist:
+        user = Users(user_id=result_message['chat_id'], calls=0)
+        user.save()
+
     if 'fat' in message['text']:
         result_message['text'] = random.choice(jokes['fat'])
         try:
@@ -83,6 +92,18 @@ def send_messages(message, token):
     response_msg = json.dumps(result_message)
     status = requests.post(post_message_url, headers={
         "Content-Type": "application/json"}, data=response_msg)
+
+def table(request):
+    class User:
+        def __init__(self, id, calls):
+            self.id = id
+            self.calls = calls
+    user_list = []
+    for u in Users.objects.all():
+        user = User(u.user_id,u.calls)
+        user_list.append(user)    
+    table_dict = {'user_list' : user_list}
+    return render(request, 'chatbot/table.html', table_dict)
 
 class TelegramBotView(generic.View):
 

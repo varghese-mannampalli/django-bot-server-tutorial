@@ -1,0 +1,24 @@
+{% extends "chatbot/header.html" %}
+
+{% block content %}
+<h3>Calls per User</h3>
+<br>
+<br>
+
+<table>
+<tr>
+    <td>User_id</td>
+    <td> Calls </td>
+</tr>
+{% for user in user_list %}
+<tr>
+	<td>
+		   {{ user.id }}
+	</td>
+    <td>
+            {{ user.calls }}
+    </td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

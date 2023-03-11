@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from chatbot import views
 
 urlpatterns = [
     url(r'^c817304a3d163ebd58b44dd446eba29572300724098cdbca1a/?',include('chatbot.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^table/', views.table, name='table')
 ]
